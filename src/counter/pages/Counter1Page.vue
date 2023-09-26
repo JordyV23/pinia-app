@@ -2,8 +2,8 @@
 
 import { storeToRefs } from 'pinia';
 import { useCounterOptionsStore } from '../../store/counter-options';
-const counterOption = useCounterOptionsStore();
 
+const counterOption = useCounterOptionsStore();
 const { count,squareCounte } = storeToRefs(counterOption);
 const {increment,incrementBy,$reset} = counterOption;
 
