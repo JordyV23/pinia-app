@@ -1,6 +1,6 @@
 # pinia-app
 
-This template should help get you started developing with Vue 3 in Vite.
+App desarrolla en el curso de Fernando Herra "Vue.js Intermedio" en donde se explora la implmentacion y uso de varias tecnologias como pinia - tanstack y demas
 
 ## Recommended IDE Setup
 
@@ -43,4 +43,10 @@ npm run build
 
 ```sh
 npm run lint
+```
+
+### Run JSON SERVER
+
+```sh
+npm run back-server
 ```
