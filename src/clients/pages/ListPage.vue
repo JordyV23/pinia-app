@@ -1,6 +1,7 @@
 
 <script setup lang="ts">
 import ClientsList from '@/clients/components/ClientsList.vue';
+import PaginationNumbers from '../components/PaginationNumbers.vue';
 
 
 </script>
@@ -13,6 +14,7 @@ import ClientsList from '@/clients/components/ClientsList.vue';
         <ClientsList/>
 
         <!-- Pagination Numbers -->
+        <PaginationNumbers/>
 
         <!-- Loading Modal -->
 
