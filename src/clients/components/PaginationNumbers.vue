@@ -1,25 +1,55 @@
 <script setup lang="ts">
-import useClients from "../composables/useClients";
+import { toRef, ref, watch } from "vue";
 
-const { getPage, totalPageNumners, totalPages, currentPage } = useClients();
+interface Props {
+  currentPage: number;
+  totalPages: number;
+}
+
+//Se utilizan emiciones para que el componente padre sepa que se ha cambiado de página
+//Y asi pensar en el crecimiento a futuro del componente
+interface Emits {
+  (e: "pageChanged", page: number): void;
+}
+
+const props = defineProps<Props>();
+const emits = defineEmits<Emits>();
+
+const currentPage = toRef(props, "currentPage");
+const totalPages = toRef(props, "totalPages");
+
+const totalPageNumbers = ref<number[]>([]);
+
+watch(
+  totalPages,
+  () => {
+    totalPageNumbers.value = [...new Array(totalPages.value)].map(
+      (value, index) => index + 1
+    );
+  },
+  { immediate: true }
+); //Indica que inmediatamente que se construya el componente se ejecute la función
 </script>
 
 <template>
   <div>
-    <button :disabled="currentPage === 1" @click="getPage(currentPage - 1)">
+    <button
+      :disabled="currentPage === 1"
+      @click="emits('pageChanged', currentPage - 1)"
+    >
       Anterior
     </button>
     <button
-      v-for="number of totalPageNumners"
+      v-for="number of totalPageNumbers"
       :key="number"
-      @click="getPage(number)"
+      @click="emits('pageChanged', number)"
       :class="{ active: currentPage === number }"
     >
       {{ number }}
     </button>
     <button
       :disabled="currentPage === totalPages"
-      @click="getPage(currentPage + 1)"
+      @click="emits('pageChanged', currentPage + 1)"
     >
       Siguiente
     </button>
