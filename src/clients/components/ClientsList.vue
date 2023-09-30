@@ -2,7 +2,7 @@
 import { RouterLink } from 'vue-router';
 import useClients from '@/clients/composables/useClients';
 
-const {isLoading,clients} =  useClients();
+const {clients} =  useClients();
 
 </script>
 
