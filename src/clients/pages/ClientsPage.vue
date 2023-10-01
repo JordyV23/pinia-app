@@ -1,7 +1,7 @@
 <script setup lang="ts">
 //Primero importaciones de Terceros
-import { useMutation } from "@tanstack/vue-query";
-import { useRoute } from "vue-router";
+import { useMutation, useQueryClient } from "@tanstack/vue-query";
+import { useRoute, useRouter } from "vue-router";
 //Luego modulos internos
 import useClient from "@/clients/composables/useClient";
 import LoadingModal from "@/shared/components/LoadingModal.vue";
@@ -10,8 +10,10 @@ import clientsApi from "@/api/clients-api";
 import { watch } from "vue";
 
 const route = useRoute();
+const router = useRouter();
+const queryClient = useQueryClient();
 
-const { client, isLoading } = useClient(+route.params.id);
+const { client, isLoading, isError } = useClient(+route.params.id);
 
 const updateClient = async (client: Client): Promise<Client> => {
   //Particularidad: Validar que no se pueda modificar el ID es parte del backend
@@ -19,6 +21,11 @@ const updateClient = async (client: Client): Promise<Client> => {
   const { id, ...cliente } = client;
 
   const { data } = await clientsApi.patch(`clients/${client.id}`, cliente);
+  const queries = queryClient
+    .getQueryCache()
+    .findAll(["clients?page="], { exact: false });
+  queries.forEach((query) => query.fetch());
+
   return data;
 };
 
@@ -29,6 +36,12 @@ watch(clientMutation.isSuccess, () => {
     clientMutation.reset();
   });
 });
+
+watch(isError, () => {
+  if(isError){
+    router.replace('/clients')
+  }
+})
 </script>
 
 <template>

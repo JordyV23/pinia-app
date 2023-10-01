@@ -11,7 +11,11 @@ const getClient = async (id: number): Promise<Client> => {
 const useClient = (id: number) => {
   const client = ref<Client>();
 
-  const { isLoading, data } = useQuery(["client", id], () => getClient(id));
+  const { isLoading, data, isError } = useQuery(
+    ["client", id], 
+    () => getClient(id),
+    {retry: false,},
+  );
 
   watch(
     data,
@@ -26,6 +30,7 @@ const useClient = (id: number) => {
   return {
     isLoading,
     client,
+    isError,
   };
 };
 
